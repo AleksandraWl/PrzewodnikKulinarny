@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.malami.przewodnikkulinarny.administrator">
+    tools:context="com.example.malami.przewodnikkulinarny.administrator"
+    >
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
@@ -19,25 +20,26 @@
 
     <Button
         android:id="@+id/dodajAdministratora"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Dodaj administratora"
-        tools:layout_editor_absoluteY="110dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginTop="133dp"
-        android:layout_marginStart="16dp"
-        android:onClick="dodajAdministratora"/>
-
-    <EditText
-        android:id="@+id/NowyAdministrator"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:hint="E-mail"
         tools:layout_editor_absoluteY="50dp"
         android:layout_marginEnd="16dp"
         android:layout_marginTop="74dp"
-        android:layout_marginStart="16dp" />
+        android:layout_marginStart="16dp"
+        android:text="Dodaj administratora"
+
+        android:onClick="dodajAdministratora"/>
+
+    <Button
+        android:id="@+id/DodajKategorie"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="196dp"
+        android:onClick="dodawanieKategorii"
+        android:text="Dodaj kategorie"
+        tools:layout_editor_absoluteY="169dp" />
+
 
 </RelativeLayout>
