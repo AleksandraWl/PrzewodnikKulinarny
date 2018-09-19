@@ -54,7 +54,13 @@ public class WyborJedzenia extends AppCompatActivity {
 
 
     public void zatwierdz(View view) {
+        Intent i = new Intent (WyborJedzenia.this, MapsActivity.class);
+         startActivity(i);
+    }
 
+    public void Administrator(View view) {
+        Intent i = new Intent (WyborJedzenia.this, administrator.class);
+        startActivity(i);
     }
 }
 

@@ -86,4 +86,9 @@ public class MainActivity extends AppCompatActivity {
         intent= new Intent(this, Rejestracja.class);
         startActivity(intent);
     }
+
+    public void mapa(View view) {
+        Intent i = new Intent (this, MapsActivity.class);
+        startActivity(i);
+    }
 }
