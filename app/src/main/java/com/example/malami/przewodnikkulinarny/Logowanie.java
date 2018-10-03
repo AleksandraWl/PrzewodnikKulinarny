@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -17,12 +18,20 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.time.Instant;
 
 public class Logowanie extends AppCompatActivity {
 
     EditText email;
     EditText haslo;
     FirebaseAuth firebaseAuth;
+    DatabaseReference databaseReference;
     ProgressDialog progressDialog;
     TextView textView;
 
@@ -52,23 +61,21 @@ public class Logowanie extends AppCompatActivity {
 
     public void logowanie(View view) {
 
-        String semail = email.getText().toString().trim();
+        final String semail = email.getText().toString().trim();
         String shaslo = haslo.getText().toString().trim();
 
-        if(TextUtils.isEmpty((semail))&& TextUtils.isEmpty(shaslo))
-        {
+
+        if (TextUtils.isEmpty((semail)) && TextUtils.isEmpty(shaslo)) {
             Toast.makeText(this, "Podaj email i hasło", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        if(TextUtils.isEmpty(semail))
-        {
+        if (TextUtils.isEmpty(semail)) {
             //email pusty
             Toast.makeText(this, "Podaj email", Toast.LENGTH_SHORT).show();
             return;
         }
-        if(TextUtils.isEmpty(shaslo))
-        {
+        if (TextUtils.isEmpty(shaslo)) {
             //haslo puste
             Toast.makeText(this, "Podaj hasło", Toast.LENGTH_SHORT).show();
             return;
@@ -78,30 +85,39 @@ public class Logowanie extends AppCompatActivity {
         progressDialog.setMessage("Logowanie, proszę czekać.. ");
         progressDialog.show();
 
-        final FirebaseUser user = firebaseAuth.getCurrentUser();
-        firebaseAuth.signInWithEmailAndPassword(semail,shaslo)
-                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(Task<AuthResult> task) {
-                        progressDialog.dismiss();
-                        if (user.isEmailVerified()==true)
-                        {
-                            if (task.isSuccessful()) {
 
-                                Toast.makeText(Logowanie.this, "Logowanie udało się", Toast.LENGTH_LONG).show();
-                                Intent i = new Intent(Logowanie.this, WyborJedzenia.class);
-                                startActivity(i);
+        final FirebaseUser user = firebaseAuth.getCurrentUser();
+
+
+            firebaseAuth.signInWithEmailAndPassword(semail, shaslo)
+                    .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(Task<AuthResult> task) {
+                            progressDialog.dismiss();
+
+                            if (user.isEmailVerified() == true) {
+                                if (task.isSuccessful()) {
+                                    CzyAdmin(semail);
+
+                                    Toast.makeText(Logowanie.this, "Logowanie udało się", Toast.LENGTH_LONG).show();
+                                    Intent i = new Intent(Logowanie.this, WyborJedzenia.class);
+                                    startActivity(i);
+                                    email.setText("");
+                                    haslo.setText("");
+
+                                } else {
+                                    Toast.makeText(Logowanie.this, "Logowanie nie udało się", Toast.LENGTH_LONG).show();
+                                    Log.e("ERROR", task.getException().toString());
+                                    Toast.makeText(Logowanie.this, task.getException().getMessage(), Toast.LENGTH_LONG).show();
+                                }
+                            } else {
+                                Toast.makeText(Logowanie.this, "Wysłano e-mail weryfikacyjny", Toast.LENGTH_LONG).show();
                             }
-                            else
-                            {
-                                Toast.makeText(Logowanie.this, "Logowanie nie udało się", Toast.LENGTH_LONG).show();
-                                Log.e("ERROR", task.getException().toString());
-                                Toast.makeText(Logowanie.this, task.getException().getMessage(), Toast.LENGTH_LONG).show();
-                            }}
-                        else { Toast.makeText(Logowanie.this, "Wysłano e-mail weryfikacyjny", Toast.LENGTH_LONG).show();}
-                    }
-                });
-    }
+                        }
+                    });
+
+        }
+
 
     public void BrakHasla(View view) {
         String semail = email.getText().toString().trim();
@@ -124,4 +140,29 @@ public class Logowanie extends AppCompatActivity {
         }
 
     }
+
+    public void CzyAdmin(final String emailAdmin)
+    {
+        databaseReference= FirebaseDatabase.getInstance().getReference("Administratorzy");
+        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot s : dataSnapshot.getChildren()){
+                   admin Admin = s.getValue(admin.class);
+                   if (Admin.getEmail().toString().equals(emailAdmin))
+                   {
+                       Intent i = new Intent(Logowanie.this, WyborJedzeniaAdmin.class);
+                       startActivity(i);
+
+                   }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
 }

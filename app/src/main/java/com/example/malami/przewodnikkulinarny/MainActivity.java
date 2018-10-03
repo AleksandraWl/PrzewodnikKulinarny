@@ -88,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void mapa(View view) {
-        Intent i = new Intent (this, MapsActivity.class);
+        Intent i = new Intent (this, WyborJedzenia.class);
         startActivity(i);
     }
 }

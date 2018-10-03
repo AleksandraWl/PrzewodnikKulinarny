@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.malami.przewodnikkulinarny.WyborJedzenia">
+    tools:context="com.example.malami.przewodnikkulinarny.WyborJedzeniaAdmin">
 
 
     <LinearLayout
@@ -37,10 +37,11 @@
                 android:layout_weight="1"
                 android:text=""
                 android:background="@drawable/przycisk"
-                />
+                android:onClick="coTo"/>
         </LinearLayout>
 
     </LinearLayout>
+
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
@@ -62,6 +63,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="146dp"/>
 
+
     <Button
         android:id="@+id/zatwierdź"
         android:layout_width="match_parent"
@@ -71,8 +73,18 @@
         android:layout_marginTop="205dp"
         android:layout_marginStart="16dp"
         android:onClick="zatwierdz"
-        android:text="Zatwierdź"
-         />
+        android:text="Zatwierdź" />
+
+    <Button
+        android:id="@+id/administrator"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:layout_editor_absoluteY="241dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="277dp"
+        android:layout_marginStart="16dp"
+        android:onClick="administrator"
+        android:text="Ustawienia administratora" />
 
 
 </RelativeLayout>

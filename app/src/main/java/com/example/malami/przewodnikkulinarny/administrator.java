@@ -27,12 +27,18 @@ public class administrator extends AppCompatActivity {
         startActivity(i);
     }
 
+    public void usunAdministratora(View view) {
+        Intent i = new Intent (administrator.this, UsunAdministratora.class);
+        startActivity(i);
+    }
 
 
     public void dodawanieKategorii(View view) {
             Intent i = new Intent(administrator.this, DodawanieKategorii.class);
             startActivity(i);
         }
+
+
 }
 
 

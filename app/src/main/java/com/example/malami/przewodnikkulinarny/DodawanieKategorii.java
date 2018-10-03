@@ -14,9 +14,11 @@ public class DodawanieKategorii extends AppCompatActivity {
 
     EditText NowaKategoria;
     EditText Informacje;
+   // EditText Lokalizacja;
     DatabaseReference kategorie;
     String kategoria;
     String informacje;
+    //String lokalizacja;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,13 +27,18 @@ public class DodawanieKategorii extends AppCompatActivity {
 
         NowaKategoria=(findViewById(R.id.NowaKategoria));
         Informacje = (findViewById(R.id.Informacje));
+       // Lokalizacja= (findViewById(R.id.Adres));
         kategorie = FirebaseDatabase.getInstance().getReference("Kategorie");
+
+
 
     }
 
     public void DodajKategorie(View view) {
         kategoria = NowaKategoria.getText().toString().trim();
         informacje= Informacje.getText().toString().trim();
+      //  lokalizacja= Lokalizacja.getText().toString().trim();
+
 
         if(!TextUtils.isEmpty(kategoria))
         {
