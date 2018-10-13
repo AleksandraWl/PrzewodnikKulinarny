@@ -10,7 +10,7 @@ import android.widget.Toast;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-public class DodawanieKategorii extends AppCompatActivity {
+public class DodawanieRestauracji extends AppCompatActivity {
 
     EditText NowaKategoria;
     EditText Informacje;

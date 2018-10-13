@@ -34,26 +34,19 @@ public class DodawanieAdministratora extends AppCompatActivity {
 
     public void dodajAdministratora(View view) {
         email = NowyAdministrator.getText().toString().trim();
-        if(!TextUtils.isEmpty(email) && TworzenieAdmina(email))
+        if(!TextUtils.isEmpty(email))
         {
-            admin admin = new admin(email);
-            String id= administratorzy.push().getKey();
-            administratorzy.child(id).setValue(admin);
-            Toast.makeText(this, "Ok, dodano", Toast.LENGTH_SHORT).show();
+            TworzenieAdmina(email);
         }
-        else             Toast.makeText(this, "Nie dodano", Toast.LENGTH_SHORT).show();
+        else             Toast.makeText(this, "Podaj e-mail", Toast.LENGTH_SHORT).show();
 
-
-        //TworzenieAdmina(email);
         Intent i  = new Intent (DodawanieAdministratora.this, administrator.class);
         startActivity(i);
     }
 
 
-    public boolean TworzenieAdmina(final String emailAdmin)
+    public void TworzenieAdmina(final String emailAdmin)
     {
-        final boolean[] zmienna = {false};
-        zmienna[0]=false;
 
         databaseReference= FirebaseDatabase.getInstance().getReference("Administratorzy");
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -61,23 +54,19 @@ public class DodawanieAdministratora extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot s : dataSnapshot.getChildren()){
                     admin Admin = s.getValue(admin.class);
-                    if (Admin.getEmail().toString().equals(emailAdmin))
-                    {
-                        //Toast.makeText(DodawanieAdministratora.this, "Podany e-mail istnieje w bazie administratorów", Toast.LENGTH_SHORT).show();;
-                        zmienna[0] = true;
-
+                    if (Admin.getEmail().equals(emailAdmin)) {
+                        Toast.makeText(DodawanieAdministratora.this, "Podany e-mail istnieje w bazie administratorów", Toast.LENGTH_SHORT).show();
                     }
-                    else
+                    else if (!(Admin.getEmail().equals(emailAdmin)))
                     {
-                        /* admin admin = new admin(emailAdmin);
+                    admin admin = new admin(emailAdmin);
                     String id= administratorzy.push().getKey();
                     administratorzy.child(id).setValue(admin);
-                    Toast.makeText(DodawanieAdministratora.this, "Dodano nowego administratora", Toast.LENGTH_SHORT).show();*/
-
+                    Toast.makeText(DodawanieAdministratora.this, "Dodano nowego administratora", Toast.LENGTH_SHORT).show();
                     }
 
                 }
-                Toast.makeText(DodawanieAdministratora.this, "" + zmienna[0], Toast.LENGTH_SHORT).show();;
+              //  Toast.makeText(DodawanieAdministratora.this, "" + zmienna[0], Toast.LENGTH_SHORT).show();;
             }
 
             @Override
@@ -86,7 +75,7 @@ public class DodawanieAdministratora extends AppCompatActivity {
             }
 
         });
-        return zmienna[0];
+
 
     }
 }

@@ -34,5 +34,15 @@
         android:layout_marginTop="133dp"
         android:layout_marginStart="16dp"/>
 
+    <Button
+        android:id="@+id/usun"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/textView4"
+        android:layout_below="@+id/spinner"
+        android:layout_marginTop="19dp"
+        android:text="Usuń"
+        android:onClick="usun"/>
+
 
 </RelativeLayout>

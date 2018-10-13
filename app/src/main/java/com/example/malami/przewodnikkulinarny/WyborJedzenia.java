@@ -2,6 +2,7 @@ package com.example.malami.przewodnikkulinarny;
 
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.constraint.solver.widgets.Snapshot;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -37,6 +38,8 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import okhttp3.internal.cache.DiskLruCache;
+
 
 public class WyborJedzenia extends AppCompatActivity{
 
@@ -58,6 +61,7 @@ public class WyborJedzenia extends AppCompatActivity{
     DatabaseReference MDR;
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,53 +74,94 @@ public class WyborJedzenia extends AppCompatActivity{
         zapytanie = (Button) findViewById(R.id.button2);
 
 
-        NowyAdministrator = (findViewById(R.id.NowyAdministrator));
-        administratorzy = FirebaseDatabase.getInstance().getReference("Administratorzy");
+       // NowyAdministrator = (findViewById(R.id.NowyAdministrator));
+     //   administratorzy = FirebaseDatabase.getInstance().getReference("Administratorzy");
 
 
         spinner = (findViewById(R.id.spinner));
         baza = FirebaseDatabase.getInstance().getReference();
         firebase = new FirebaseHelper(baza);
 
-        spinner.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, firebase.ListaKategorie()));
-        genere = spinner.getSelectedItem().toString();
-        MDR=FirebaseDatabase.getInstance().getReference("Kategorie").child(genere);
+        spinner.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, ListaKategorie()));
         spinner2 = (findViewById(R.id.spinner2));
-
-        /*db.child("Kategorie").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot areaSnapshot : dataSnapshot.getChildren()) {
-                    String kategoria = areaSnapshot.child("kategoria").getValue(String.class);
-
-                    Spinner areaSpinner = (Spinner) findViewById(R.id.spinner);
-                    final String[] areas = {kategoria};
-                    ArrayAdapter<String> areasAdapter = new ArrayAdapter<String>(WyborJedzenia.this,
-                            android.R.layout.simple_spinner_item, areas);
-                    areasAdapter.setDropDownViewResource(android.R./'/layout.simple_spinner_dropdown_item);
-                    areaSpinner.setAdapter(areasAdapter);
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });*/
 
         View.OnClickListener l = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                final ArrayList<String> lista=new ArrayList<>();
                 AlertDialog.Builder info = new AlertDialog.Builder(WyborJedzenia.this);
-                info.setTitle("Informacja");
-                info.setMessage(""+MDR);
+                genere = spinner.getSelectedItem().toString();
+                MDR=FirebaseDatabase.getInstance().getReference("Kategorie").child(genere);
+                info.setTitle(MDR.getKey() + " - informacja");
+                info.setMessage(""+Info(MDR.getKey()));
                 info.setPositiveButton("Ok", null);
                 info.show();
+
             }
         };
-
         zapytanie.setOnClickListener(l);
     }
+
+
+
+//lista do wyswietlania info
+public ArrayList<String> Info(final String cos)
+{
+    final ArrayList<String> lista=new ArrayList<>();
+    lista.clear();
+   // lista.add("Kategoria");
+
+
+
+    baza.addChildEventListener(new ChildEventListener() {
+        @Override
+        public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+            info(dataSnapshot,lista,cos);
+        }
+
+        @Override
+        public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+            info(dataSnapshot,lista,cos);
+
+        }
+
+        @Override
+        public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+        }
+
+        @Override
+        public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+        }
+
+        @Override
+        public void onCancelled(DatabaseError databaseError) {
+
+        }
+
+    });
+
+    return lista;
+}
+
+    private ArrayList<String> info(DataSnapshot snapshot,ArrayList<String> lista, String cos)
+    {
+
+        lista.clear();
+        lista.add("Kategoria");
+        for (DataSnapshot ds:snapshot.getChildren())
+        {
+            //lista.clear();
+            if (cos.equals(ds.getValue(kategorie.class).getKategoria())) {
+                String kat = ds.getValue(kategorie.class).getInformacja();
+                lista.add(kat);
+            }
+        }
+       // Toast.makeText(this, lista+"", Toast.LENGTH_LONG).show();
+        return lista;
+    }
+//
 
 
     @Override
@@ -148,8 +193,57 @@ public class WyborJedzenia extends AppCompatActivity{
     }
 
 
+//do spinnera kategorii
+    public ArrayList<String> ListaKategorie()
+    {
+        final ArrayList<String> lista=new ArrayList<>();
+        lista.clear();
+        lista.add("Kategoria");
 
 
+        baza.addChildEventListener(new ChildEventListener() {
+        @Override
+        public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+            fetchData(dataSnapshot,lista);
+        }
+
+        @Override
+        public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+            fetchData(dataSnapshot,lista);
+
+        }
+
+        @Override
+        public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+        }
+
+        @Override
+        public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+        }
+
+        @Override
+        public void onCancelled(DatabaseError databaseError) {
+
+        }
+    });
+
+        return lista;
+}
+
+    private void fetchData(DataSnapshot snapshot,ArrayList<String> lista)
+    {
+
+        lista.clear();
+        lista.add("Kategoria");
+        for (DataSnapshot ds:snapshot.getChildren())
+        {
+            String kategoria=ds.getValue(kategorie.class).getKategoria();
+            lista.add(kategoria);
+        }
+    }
+//
 
 }
 
