@@ -36,7 +36,7 @@ public class UsunAdministratora extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_usun_administratora);
-        baza = FirebaseDatabase.getInstance().getReference("Kategorie");
+        baza = FirebaseDatabase.getInstance().getReference();
         usun = (Button) findViewById(R.id.usun);
 
         spinner = (findViewById(R.id.spinner));
@@ -90,7 +90,7 @@ public class UsunAdministratora extends AppCompatActivity {
     private void Administratorzy(DataSnapshot snapshot,ArrayList<String> lista)
     {
         //lista.clear();
-        lista.add("Administratorzy");
+//        lista.add("Administratorzy");
         for (DataSnapshot ds:snapshot.getChildren())
         {
             String administrator=ds.getValue(admin.class).getEmail();

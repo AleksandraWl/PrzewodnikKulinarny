@@ -48,7 +48,7 @@ public class FirebaseHelper {
     public ArrayList<String> ListaKategorie()
     {
         final ArrayList<String> lista=new ArrayList<>();
-        lista.clear();
+        //lista.clear();
         lista.add("Kategoria");
 
 
@@ -61,46 +61,6 @@ public class FirebaseHelper {
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
                 fetchData(dataSnapshot,lista);
-
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-
-        return lista;
-    }
-
-
-    public ArrayList<String> ListaAdministratorow()
-    {
-        final ArrayList<String> lista=new ArrayList<>();
-        lista.clear();
-        lista.add("Administratorzy");
-
-
-        db.addChildEventListener(new ChildEventListener() {
-            @Override
-
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                Administratorzy(dataSnapshot,lista);
-            }
-
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                Administratorzy(dataSnapshot,lista);
 
             }
 
@@ -126,23 +86,12 @@ public class FirebaseHelper {
     private void fetchData(DataSnapshot snapshot,ArrayList<String> lista)
     {
 
-        lista.clear();
-        lista.add("Kategoria");
+        //lista.clear();
+        //lista.add("Kategoria");
         for (DataSnapshot ds:snapshot.getChildren())
         {
             String kategoria=ds.getValue(kategorie.class).getKategoria();
             lista.add(kategoria);
-        }
-    }
-
-    private void Administratorzy(DataSnapshot snapshot,ArrayList<String> lista)
-    {
-        lista.clear();
-        lista.add("Administratorzy");
-        for (DataSnapshot ds:snapshot.getChildren())
-        {
-            String administrator=ds.getValue(admin.class).getEmail();
-            lista.add(administrator);
         }
     }
 

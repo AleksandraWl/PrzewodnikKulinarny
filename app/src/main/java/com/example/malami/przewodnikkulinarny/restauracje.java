@@ -5,6 +5,7 @@ public class restauracje {
     String dlugosc;
     String szerokosc;
     String adres;
+    String id;
 
     restauracje()
     {
@@ -16,6 +17,7 @@ public class restauracje {
         this.dlugosc =dlugosc;
         this.szerokosc=szerokosc;
         this.adres=adres;
+
     }
 
     public String getSzerokosc() {

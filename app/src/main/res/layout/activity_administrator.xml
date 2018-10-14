@@ -100,7 +100,7 @@
         android:id="@+id/textView3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Administrator"
+        android:text="Restauracja"
         tools:layout_editor_absoluteY="40dp"
         android:layout_marginTop="274dp"
         android:layout_marginStart="16dp"/>
@@ -119,7 +119,8 @@
             android:layout_marginTop="300dp"
             tools:layout_editor_absoluteY="169dp"
             android:layout_weight="1"
-            android:text="Dodaj restauracje" />
+            android:text="Dodaj restauracje"
+            android:onClick="DodajRestauracje"/>
 
         <Button
             android:id="@+id/UsunRestauracje"
