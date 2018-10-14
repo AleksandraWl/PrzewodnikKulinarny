@@ -47,7 +47,7 @@ public class DodawanieAdministratora extends AppCompatActivity {
 
     public void TworzenieAdmina(final String emailAdmin)
     {
-
+        final int[] zmienna = {0};
         databaseReference= FirebaseDatabase.getInstance().getReference("Administratorzy");
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -55,18 +55,30 @@ public class DodawanieAdministratora extends AppCompatActivity {
                 for (DataSnapshot s : dataSnapshot.getChildren()){
                     admin Admin = s.getValue(admin.class);
                     if (Admin.getEmail().equals(emailAdmin)) {
+                        zmienna[0]++;
                         Toast.makeText(DodawanieAdministratora.this, "Podany e-mail istnieje w bazie administratorów", Toast.LENGTH_SHORT).show();
+
+
                     }
-                    else if (!(Admin.getEmail().equals(emailAdmin)))
+                   /* else
                     {
                     admin admin = new admin(emailAdmin);
                     String id= administratorzy.push().getKey();
                     administratorzy.child(id).setValue(admin);
                     Toast.makeText(DodawanieAdministratora.this, "Dodano nowego administratora", Toast.LENGTH_SHORT).show();
-                    }
+                    }*/
 
                 }
               //  Toast.makeText(DodawanieAdministratora.this, "" + zmienna[0], Toast.LENGTH_SHORT).show();;
+            if (zmienna[0]==0)
+            {
+
+                admin admin = new admin(emailAdmin);
+                String id= administratorzy.push().getKey();
+                administratorzy.child(id).setValue(admin);
+                Toast.makeText(DodawanieAdministratora.this, "Dodano nowego administratora", Toast.LENGTH_SHORT).show();
+            }
+
             }
 
             @Override
