@@ -21,10 +21,14 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.firebase.ui.auth.AuthUI;
+import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 
@@ -36,6 +40,7 @@ public class WyborJedzeniaAdmin extends AppCompatActivity{
     Spinner spinner;
     FirebaseHelper helper;
     Button wyloguj;
+    final ArrayList<String> lista=new ArrayList<>();
 
 
     @Override
@@ -49,10 +54,10 @@ public class WyborJedzeniaAdmin extends AppCompatActivity{
         wyloguj=findViewById(R.id.wyloguj);
 
         spinner = (findViewById(R.id.spinner));
-        db = FirebaseDatabase.getInstance().getReference();
+        db = FirebaseDatabase.getInstance().getReference("Restauracje");
         helper = new FirebaseHelper(db);
 
-        spinner.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, helper.ListaKategorie()));
+        spinner.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, fetchData()));
 
     }
 
@@ -61,6 +66,31 @@ public class WyborJedzeniaAdmin extends AppCompatActivity{
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu, menu);
         return true;
+    }
+
+    private ArrayList<String> fetchData()
+    {
+        lista.clear();
+        lista.add("Restauracje");
+        db.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot ds:dataSnapshot.getChildren()) {
+                    restauracje res = ds.getValue(restauracje.class);
+
+                    lista.add(res.getNazwa());
+                    //  Toast.makeText(this, ds+"", Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        return lista;
+
     }
 
     @Override

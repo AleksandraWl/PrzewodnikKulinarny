@@ -50,8 +50,8 @@ public class WyborJedzenia extends AppCompatActivity{
     FirebaseHelper firebase;
     Button wyloguj;
     Spinner spinner2;
-
-
+ DatabaseReference db;
+    final ArrayList<String> lista=new ArrayList<>();
 
     EditText NowyAdministrator;
     DatabaseReference administratorzy;
@@ -59,7 +59,6 @@ public class WyborJedzenia extends AppCompatActivity{
     String genere;
     Button zapytanie;
     DatabaseReference MDR;
-
 
 
     @Override
@@ -72,9 +71,11 @@ public class WyborJedzenia extends AppCompatActivity{
         setSupportActionBar(toolbar);
         wyloguj = findViewById(R.id.wyloguj);
         zapytanie = (Button) findViewById(R.id.button2);
+        db = FirebaseDatabase.getInstance().getReference("Restauracje");
 
 
-       // NowyAdministrator = (findViewById(R.id.NowyAdministrator));
+
+        // NowyAdministrator = (findViewById(R.id.NowyAdministrator));
      //   administratorzy = FirebaseDatabase.getInstance().getReference("Administratorzy");
 
 
@@ -82,7 +83,7 @@ public class WyborJedzenia extends AppCompatActivity{
         baza = FirebaseDatabase.getInstance().getReference();
         firebase = new FirebaseHelper(baza);
 
-        spinner.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, ListaKategorie()));
+        spinner.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, fetchData()));
         spinner2 = (findViewById(R.id.spinner2));
 
         View.OnClickListener l = new View.OnClickListener() {
@@ -93,7 +94,7 @@ public class WyborJedzenia extends AppCompatActivity{
                 genere = spinner.getSelectedItem().toString();
                 MDR=FirebaseDatabase.getInstance().getReference("Kategorie").child(genere);
                 info.setTitle(MDR.getKey() + " - informacja");
-                info.setMessage(""+Info(MDR.getKey()));
+                //info.setMessage(""+Info(MDR.getKey()));
                 info.setPositiveButton("Ok", null);
                 info.show();
 
@@ -101,9 +102,32 @@ public class WyborJedzenia extends AppCompatActivity{
         };
         zapytanie.setOnClickListener(l);
     }
+    private ArrayList<String> fetchData()
+    {
+        lista.clear();
+        lista.add("Restauracje");
+        db.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot ds:dataSnapshot.getChildren()) {
+                    restauracje res = ds.getValue(restauracje.class);
 
+                    lista.add(res.getNazwa());
+                    //  Toast.makeText(this, ds+"", Toast.LENGTH_LONG).show();
+                }
+            }
 
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
 
+            }
+        });
+
+        return lista;
+
+    }
+
+/*
 //lista do wyswietlania info
 public ArrayList<String> Info(final String cos)
 {
@@ -160,7 +184,7 @@ public ArrayList<String> Info(final String cos)
         }
        // Toast.makeText(this, lista+"", Toast.LENGTH_LONG).show();
         return lista;
-    }
+    }*/
 //
 
 

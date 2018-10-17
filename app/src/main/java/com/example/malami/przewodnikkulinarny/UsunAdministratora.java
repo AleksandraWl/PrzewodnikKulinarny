@@ -30,24 +30,24 @@ public class UsunAdministratora extends AppCompatActivity {
 
     String genere;
     DatabaseReference MDR;
-    private ArrayList<String> lista;
+    final ArrayList<String> lista=new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_usun_administratora);
-        baza = FirebaseDatabase.getInstance().getReference();
+        baza = FirebaseDatabase.getInstance().getReference("Administratorzy");
         usun = (Button) findViewById(R.id.usun);
 
         spinner = (findViewById(R.id.spinner));
 
         //helper = new FirebaseHelper(db);
 
-        spinner.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, ListaAdministratorow()));
+        spinner.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, fetchData()));
 
 
     }
-
+/*
     public ArrayList<String> ListaAdministratorow()
     {
         final ArrayList<String> lista=new ArrayList<>();
@@ -97,8 +97,8 @@ public class UsunAdministratora extends AppCompatActivity {
             lista.add(administrator);
         }
     }
-
-    /*private ArrayList<String> fetchData()
+*/
+    private ArrayList<String> fetchData()
     {
         //lista.clear();
         lista.add("Administratorzy");
@@ -120,6 +120,6 @@ public class UsunAdministratora extends AppCompatActivity {
 
         return lista;
 
-    }*/
+    }
 
 }
